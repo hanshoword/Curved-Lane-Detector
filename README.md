@@ -35,37 +35,74 @@
   * Video의 한 프레임을 받아옵니다
   * 해당 프레임을 Gaussian Blur처리를 수행합니다.
   * 4점(좌상,좌하,우상,우하)의 기하학적 변환을 통해 관심영역(ROI)를 BirdEyedView로 변환합니다.
-  * HSV공간에서 노란색, BGR공간에서 흰색 차선을 검출합니다.
+  * HSV공간에서 노란색, RGB공간에서 흰색 차선을 검출합니다.
   * 이진화를 통해 필터링을 완료합니다.
   * FindLane : BirdEyedView 프레임에서 numpy 및 Sliding Windows을 통해, 흰색픽셀이라면 차선으로 인식하도록 합니다.
   * 계산된 픽셀을 근거로 2차원 함수의 계수를 구하고 구해진 함수를 통해 차선을 추정합니다.
   
  ## Source Code 목록
  
- ##### Methods
+ ## Methods
       
-  * def Binary(frame, threshold):
+  ### def Binary(frame, threshold):
   
   <img src = "https://user-images.githubusercontent.com/47768726/60193049-f6272e00-9871-11e9-8a64-a1c65f8e58a1.JPG" width= "45%" height = "45%"></img>
   <img src = "https://user-images.githubusercontent.com/47768726/60193054-f6272e00-9871-11e9-8e70-584bff9ed8b9.JPG" width= "45%" height = "45%"></img>
    <img src = "https://user-images.githubusercontent.com/47768726/60193056-f6bfc480-9871-11e9-91e0-277fb694180a.JPG" width= "45%" height = "45%"></img>
+   <img src = "https://user-images.githubusercontent.com/47768726/60196559-620c9500-9878-11e9-9715-75cad5e65a71.JPG" width= "45%" height = "45%"></img>
 
+```
 이미지를 이진화 합니다.
-이진화하기위해 BGR이미지를 Gray Scale로 변환합니다.
-임계값(threshold)를 기준으로 임계값 이하라면 검은색, 임계값 이상이면 흰색으로 변환합니다.
 
-  * def Gray(frame):
+이진화하기위해 RGB이미지를 Gray Scale로 변환합니다.
+
+임계값(threshold)를 기준으로 임계값 이하라면 검은색, 임계값 이상이면 흰색으로 변환합니다.
+```
+
+  ### def Gray(frame):
   
     <img src = "https://user-images.githubusercontent.com/47768726/60196279-b82d0880-9877-11e9-8761-853a9eb8d1fc.JPG" width= "45%" height = "45%"></img>
     <img src = "https://user-images.githubusercontent.com/47768726/60196280-b8c59f00-9877-11e9-9fcc-9de844d5ae8b.JPG" width= "45%" height = "45%"></img>
      <img src = "https://user-images.githubusercontent.com/47768726/60196281-b8c59f00-9877-11e9-866f-fbe2b3c95945.JPG" width= "45%" height = "45%"></img>
      <img src = "https://user-images.githubusercontent.com/47768726/60196283-b8c59f00-9877-11e9-853c-3ea6d5069ae4.JPG" width= "45%" height = "45%"></img>
 
-  * def BGRtoHSV(frame):
-  * def BGRtoHLS(frame):
-  * def GaussianBlur(frame):
-  * def Dilation(frame, iterations):
-  * def BirdEyeView(frame):
+```
+return cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
+
+RGB이미지를 Gray Scale로 변환합니다.
+```
+
+  ### def BGRtoHSV(frame):
+  
+  ```
+  BGR이미지를 HSV공간으로 변환합니다.
+  ```
+  <img src = "https://user-images.githubusercontent.com/47768726/60197540-89646180-987a-11e9-81e9-444195bbd4ec.jpg" width="40%" height="40%"></img>
+  ```
+  Hue : 색상 
+  Saturation : 채도
+  Value : 명도
+
+  return cv2.cvtColor(frame, cv2.COLOR_BGR2HSV) 
+  ```
+
+  ### def BGRtoHLS(frame):
+  
+  ```
+  BGR이미지를 HLS공간으로 변환합니다.
+  ```
+    <img src = "https://user-images.githubusercontent.com/47768726/60197539-89646180-987a-11e9-8ec6-ef75c7785ee5.jpg" width="40%" height="40%"></img>  
+  ```
+  Hue : 색상
+  Lightness : 명도
+  Saturation : 채도  
+  
+  return cv2.cvtColor(frame, cv2.COLOR_BGR2HLS)
+  ```
+  
+  ### def GaussianBlur(frame):
+  ### def Dilation(frame, iterations):
+  ### def BirdEyeView(frame):
   
   ![o1](https://user-images.githubusercontent.com/47768726/60192938-bf511800-9871-11e9-814c-3bf781361879.JPG)
 ![o2](https://user-images.githubusercontent.com/47768726/60192942-c1b37200-9871-11e9-82f7-fa4ff963a3b4.JPG)
