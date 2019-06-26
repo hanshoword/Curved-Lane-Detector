@@ -118,7 +118,11 @@ RGB이미지를 Gray Scale로 변환합니다.
 
   return cv2.dilate(frame, kernel, iterations)
     
-  3x3 크기의 1로 채워진 kernel을 생성하며, 해당 커널
+  3x3 크기의 1로 채워진 kernel을 생성합니다.
+  
+  이 후 이미지와 커널을 통해 팽창을 실시합니다.
+  
+  팽창이란 영역내의 픽셀을 최대 픽셀값(255:흰색)으로 대체하여, 어두운영역이 줄어들고 밝은 영역을 늘립니다.
   
   img: Dilation을 수행할 원본 이미지
   
