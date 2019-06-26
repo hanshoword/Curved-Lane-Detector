@@ -50,8 +50,17 @@
   <img src = "https://user-images.githubusercontent.com/47768726/60193054-f6272e00-9871-11e9-8e70-584bff9ed8b9.JPG" width= "45%" height = "45%"></img>
    <img src = "https://user-images.githubusercontent.com/47768726/60193056-f6bfc480-9871-11e9-91e0-277fb694180a.JPG" width= "45%" height = "45%"></img>
 
+이미지를 이진화 합니다.
+이진화하기위해 BGR이미지를 Gray Scale로 변환합니다.
+임계값(threshold)를 기준으로 임계값 이하라면 검은색, 임계값 이상이면 흰색으로 변환합니다.
 
   * def Gray(frame):
+  
+    <img src = "https://user-images.githubusercontent.com/47768726/60196279-b82d0880-9877-11e9-8761-853a9eb8d1fc.JPG" width= "45%" height = "45%"></img>
+    <img src = "https://user-images.githubusercontent.com/47768726/60196280-b8c59f00-9877-11e9-9fcc-9de844d5ae8b.JPG" width= "45%" height = "45%"></img>
+     <img src = "https://user-images.githubusercontent.com/47768726/60196281-b8c59f00-9877-11e9-866f-fbe2b3c95945.JPG" width= "45%" height = "45%"></img>
+     <img src = "https://user-images.githubusercontent.com/47768726/60196283-b8c59f00-9877-11e9-853c-3ea6d5069ae4.JPG" width= "45%" height = "45%"></img>
+
   * def BGRtoHSV(frame):
   * def BGRtoHLS(frame):
   * def GaussianBlur(frame):
