@@ -111,7 +111,7 @@ RGB이미지를 Gray Scale로 변환합니다.
   
    <img src = "https://user-images.githubusercontent.com/47768726/60193054-f6272e00-9871-11e9-8e70-584bff9ed8b9.JPG" width = "40%" height = "40%"></img>
   
-  <img src = "https://user-images.githubusercontent.com/47768726/60199364-b9adff00-987e-11e9-95ca-03957687f64d.JPG" width = "40%" height = "40%"></img>
+  <img src = "https://user-images.githubusercontent.com/47768726/60199365-b9adff00-987e-11e9-95d0-4a03321d752f.JPG" width = "40%" height = "40%"></img>
  ``` 
   left : Dilation 5회, right : Dilation 10회
  
