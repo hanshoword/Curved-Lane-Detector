@@ -46,11 +46,10 @@
       
   * def Binary(frame, threshold):
   
-  <img src = "https://user-images.githubusercontent.com/47768726/60193049-f6272e00-9871-11e9-8a64-a1c65f8e58a1.JPG" width= "30%" height = "30%"></img>
-  <img src = "https://user-images.githubusercontent.com/47768726/60193049-f6272e00-9871-11e9-8a64-a1c65f8e58a1.JPG" width= "30%" height = "30%"></img>
+  <img src = "https://user-images.githubusercontent.com/47768726/60193049-f6272e00-9871-11e9-8a64-a1c65f8e58a1.JPG" width= "45%" height = "45%"></img>
+  <img src = "https://user-images.githubusercontent.com/47768726/60193054-f6272e00-9871-11e9-8e70-584bff9ed8b9.JPG" width= "45%" height = "45%"></img>
+   <img src = "https://user-images.githubusercontent.com/47768726/60193056-f6bfc480-9871-11e9-91e0-277fb694180a.JPG" width= "45%" height = "45%"></img>
 
-![b3](https://user-images.githubusercontent.com/47768726/60193054-f6272e00-9871-11e9-8e70-584bff9ed8b9.JPG)
-![b5](https://user-images.githubusercontent.com/47768726/60193056-f6bfc480-9871-11e9-91e0-277fb694180a.JPG)
 
   * def Gray(frame):
   * def BGRtoHSV(frame):
