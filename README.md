@@ -61,10 +61,10 @@
 
   ### def Gray(frame):
   
-    <img src = "https://user-images.githubusercontent.com/47768726/60196279-b82d0880-9877-11e9-8761-853a9eb8d1fc.JPG" width= "45%" height = "45%"></img>
-    <img src = "https://user-images.githubusercontent.com/47768726/60196280-b8c59f00-9877-11e9-9fcc-9de844d5ae8b.JPG" width= "45%" height = "45%"></img>
-     <img src = "https://user-images.githubusercontent.com/47768726/60196281-b8c59f00-9877-11e9-866f-fbe2b3c95945.JPG" width= "45%" height = "45%"></img>
-     <img src = "https://user-images.githubusercontent.com/47768726/60196283-b8c59f00-9877-11e9-853c-3ea6d5069ae4.JPG" width= "45%" height = "45%"></img>
+   <img src = "https://user-images.githubusercontent.com/47768726/60196279-b82d0880-9877-11e9-8761-853a9eb8d1fc.JPG" width= "45%" height = "45%"></img>
+   <img src = "https://user-images.githubusercontent.com/47768726/60196280-b8c59f00-9877-11e9-9fcc-9de844d5ae8b.JPG" width= "45%" height = "45%"></img>
+   <img src = "https://user-images.githubusercontent.com/47768726/60196281-b8c59f00-9877-11e9-866f-fbe2b3c95945.JPG" width= "45%" height = "45%"></img>
+   <img src = "https://user-images.githubusercontent.com/47768726/60196283-b8c59f00-9877-11e9-853c-3ea6d5069ae4.JPG" width= "45%" height = "45%"></img>
 
 ```
 return cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
@@ -73,31 +73,27 @@ RGB이미지를 Gray Scale로 변환합니다.
 ```
 
   ### def BGRtoHSV(frame):
-  
-  ```
-  BGR이미지를 HSV공간으로 변환합니다.
-  ```
-  <img src = "https://user-images.githubusercontent.com/47768726/60197540-89646180-987a-11e9-81e9-444195bbd4ec.jpg" width="40%" height="40%"></img>
-  ```
-  Hue : 색상 
-  Saturation : 채도
-  Value : 명도
 
+  <img src = "https://user-images.githubusercontent.com/47768726/60197540-89646180-987a-11e9-81e9-444195bbd4ec.jpg" width="40%" height="40%"></img>
+  
+  ```  
   return cv2.cvtColor(frame, cv2.COLOR_BGR2HSV) 
+  
+  BGR이미지를 HSV공간으로 변환합니다.
+  
+  Hue : 색상   Saturation : 채도  Value : 명도
   ```
 
   ### def BGRtoHLS(frame):
   
+   <img src = "https://user-images.githubusercontent.com/47768726/60197539-89646180-987a-11e9-8ec6-ef75c7785ee5.jpg" width="40%" height="40%"></img>  
+   
   ```
-  BGR이미지를 HLS공간으로 변환합니다.
-  ```
-    <img src = "https://user-images.githubusercontent.com/47768726/60197539-89646180-987a-11e9-8ec6-ef75c7785ee5.jpg" width="40%" height="40%"></img>  
-  ```
-  Hue : 색상
-  Lightness : 명도
-  Saturation : 채도  
-  
   return cv2.cvtColor(frame, cv2.COLOR_BGR2HLS)
+  
+  BGR이미지를 HLS공간으로 변환합니다.
+  
+  Hue : 색상  Lightness : 명도  Saturation : 채도  
   ```
   
   ### def GaussianBlur(frame):
