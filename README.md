@@ -97,7 +97,39 @@ RGB이미지를 Gray Scale로 변환합니다.
   ```
   
   ### def GaussianBlur(frame):
+  
+  ```
+    blur = cv2.GaussianBlur(frame,(5,5), 0)
+    return blur
+    
+    5x5 필터를 사용하며, 중앙에서 인접한 값에 근거하여 필터 중앙의 픽셀값을 재조정 합니다. 
+    결과적으로 이미지의 노이즈를 제거합니다.
+  ```
+  
   ### def Dilation(frame, iterations):
+
+  
+   <img src = "https://user-images.githubusercontent.com/47768726/60193054-f6272e00-9871-11e9-8e70-584bff9ed8b9.JPG" width = "40%" height = "40%"></img>
+  
+  <img src = "https://user-images.githubusercontent.com/47768726/60199364-b9adff00-987e-11e9-95ca-03957687f64d.JPG" width = "40%" height = "40%"></img>
+ ``` 
+  left : Dilation 5회, right : Dilation 10회
+ 
+  kernelRow = 3
+  kernelCol = 3
+  kernel = np.ones((kernelRow,kernelCol), np.uint8)
+
+  return cv2.dilate(frame, kernel, iterations)
+    
+  3x3 크기의 1로 채워진 kernel을 생성하며, 해당 커널
+  
+  img: Dilation을 수행할 원본 이미지
+  
+  kernel: Dilation을 위한 커널
+  
+  iterations: Dilation 반복 횟수
+  
+  ```
   ### def BirdEyeView(frame):
   
   ![o1](https://user-images.githubusercontent.com/47768726/60192938-bf511800-9871-11e9-814c-3bf781361879.JPG)
