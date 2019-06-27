@@ -133,18 +133,67 @@ RGB이미지를 Gray Scale로 변환합니다.
   ```
   ### def BirdEyeView(frame):
   
-  ![o1](https://user-images.githubusercontent.com/47768726/60192938-bf511800-9871-11e9-814c-3bf781361879.JPG)
-![o2](https://user-images.githubusercontent.com/47768726/60192942-c1b37200-9871-11e9-82f7-fa4ff963a3b4.JPG)
-![o3](https://user-images.githubusercontent.com/47768726/60192946-c2e49f00-9871-11e9-93bd-34956bceb52c.JPG)
-
+   <img src = "https://user-images.githubusercontent.com/47768726/60192938-bf511800-9871-11e9-814c-3bf781361879.JPG" width= "45%" height = "45%"></img>
+   <img src = "https://user-images.githubusercontent.com/47768726/60252302-fa505b80-9904-11e9-8b84-a9895c1ba5ba.JPG" width= "45%" height = "45%"></img>   
+   <img src = "https://user-images.githubusercontent.com/47768726/60192942-c1b37200-9871-11e9-82f7-fa4ff963a3b4.JPG" width= "45%" height = "45%"></img>
+   <img src = "https://user-images.githubusercontent.com/47768726/60252303-fa505b80-9904-11e9-83f4-73b3462760fb.JPG" width= "45%" height = "45%"></img>
+   <img src = "https://user-images.githubusercontent.com/47768726/60192946-c2e49f00-9871-11e9-93bd-34956bceb52c.JPG" width= "45%" height = "45%"></img>
+   <img src = "https://user-images.githubusercontent.com/47768726/60252304-fa505b80-9904-11e9-9fe4-bc30642c8fd1.JPG" width= "45%" height = "45%"></img>
+  
+  ```
+  BirdEyedView를 통해 차선인식을 수행합니다.
+  
+  BirdEyedView란 이름처럼 새가 위에서 바라보는 것 같이 위에서 아래로 내려다 보는듯한 이미지로 만들어 줍니다.
+  
+  변환시키기 위해 4점(좌상,좌하,우상,우하) 변환을 이용합니다.
+  
+  변환하고 싶은 이미지를 4점을 통해서 지정하고, 각 점들이 어디로 펼쳐질것인지에 대한 목적지 점을 설정합니다.
+  
+  먼저 변환을 위해 getPerspectiveTransform(원본 좌표, 결과 좌표)를 사용하여 행렬을 만들어냅니다.
+  
+  ```
   
   * def warpFrame(frame, perspective):
+  
+  ```
+  
+  이 함수는 getPerspectiveTransform을 통해 얻어온 행렬을 이용해 직접적으로 이미지를 펼쳐주는 역할을 합니다.
+  
+  cv2.warpPerspective를 사용해 목적지 행렬을 토대로 이미지를 펼쳐 BirdEyedView를 생성합니다.
+    
+  ```
+  
   * def LaneDetection(frame):
+  
+  ```c
+    이미지에서 차선을 필터링 해주는 함수입니다.
+    
+    white = cv2.inRange(frame, np.array((0,200,10)), np.array((255,255,255)))
+    hsv = BGRtoHSV(frame)
+    yellow = cv2.inRange(hsv, np.array((10,75,75)), np.array((56,255,255)))
+
+    both = cv2.add(yellow, white)
+    return both
+    
+    이미지에서 먼저 BGR공간에서 흰색범위 설정을 통해 흰색차선만 보여줍니다.
+    
+    이후 HSV공간으로 변경후, 색상,채도,명도의 범위설정을 통해 노란색 차선을 걸러줍니다.
+    
+    걸러진 두 이미지를 병합하여 흰색 및 노란색 차선이 인식된 결과르 반환합니다.   
+    
+  ```
+  
   * def FindLane(binaryFrame, prevFits = None):
     * def FindLaneBases():
-  * def SearchLane(xCenter, PixelColor=None):
-  * def probeNearby(prevFit, PixelColor):
+    * def SearchLane(xCenter, PixelColor=None):
+    * def probeNearby(prevFit, PixelColor):
   * def PolyFit(xPoints, yPoints):
+  
+   <img src = "https://user-images.githubusercontent.com/47768726/60258880-00e4d000-9911-11e9-9aa9-90ac51b553a1.jpg" width="80%" height="80%"></img>
+   
+ ```  
+  np.polyfit
+  ```
   * def Qudratic(coeffs, pts):
   * def DrawPolygon(frame, points, color=[255,0,0], thickness = 5, isClosed = True):
   * def ReductionFrame(frame):
