@@ -179,7 +179,7 @@ RGB이미지를 Gray Scale로 변환합니다.
     
     이후 HSV공간으로 변경후, 색상,채도,명도의 범위설정을 통해 노란색 차선을 걸러줍니다.
     
-    걸러진 두 이미지를 병합하여 흰색 및 노란색 차선이 인식된 결과르 반환합니다.   
+    걸러진 두 이미지를 병합하여 흰색 및 노란색 차선이 인식된 결과 반환합니다.   
     
   ```
   
@@ -238,6 +238,23 @@ RGB이미지를 Gray Scale로 변환합니다.
     ```
     
     * def SearchLane(xCenter, PixelColor=None):
+    
+    <img src="https://user-images.githubusercontent.com/47768726/60289472-74a6cd00-9951-11e9-94dd-31d2aaf1579e.jpg" width = "90%" height = "90%" ></img>
+    
+    ```
+    본격적으로 SlidingWindows를 사용해 차선을 찾습니다.
+    
+    Window의 높이를 이미지의 높이 / 윈도우의 개수로 조정합니다.
+    
+    먼저 반복문을 통해 윈도우 개수만큼 반복합니다.
+    
+    윈도우 xLow값은 xCenter의 -100, xHigh값은 xCenter의 +100으로 조정합니다.
+    
+    
+    
+    ```
+    
+    
     * def probeNearby(prevFit, PixelColor):
     
     ```c
