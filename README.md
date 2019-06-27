@@ -184,19 +184,130 @@ RGB이미지를 Gray Scale로 변환합니다.
   ```
   
   * def FindLane(binaryFrame, prevFits = None):
+  
+  
+    ```c
+    
+    실질적으로 차선을 인식하는 함수입니다.
+    
+    BirdEyedView에서 차선을 인식하는 box형태의 SlidingWindows를 통해 차선 정보를 matrix형태로 반환합니다. 
+    
+    먼저 받아온 이진화 이미지 크기로 빈 img를 만듭니다
+
+    사용할 SlidingWindow의 개수는 10개, 너비는 200, 너비의 반은 100 입니다.
+
+    nonzero를 통해 이진화 이미지에서 값이 0(검은색)이 아닌 흰색 픽셀의 인덱스(좌표)들을 반환합니다.
+    
+    nonzeroY와 nonzeroX 통해 x,y 좌표로 각각 저장합니다.
+    
+    nonzeroY = 행, nonzeroX = 열,  
+    
+    예를들어 2차원배열을 표기할때 (0,0), (0,1), (1,0), (1,1) 이런식으로 표기한다면 (nonzeroY , nonzeroX) 의 형태로 대응됩니다.
+    
+    nonzeroY = np.nonzero(binaryFrame)[0]
+    nonzeroX = np.nonzero(binaryFrame)[1]
+
+    윈도우 내 픽셀수 임계값은 50으로 정합니다. 이 임계값은 SlidingWindow의 x좌표를 재설정하는데에 사용됩니다.
+  
+    ```    
+    
     * def FindLaneBases():
+    
+    <img src = "https://user-images.githubusercontent.com/47768726/60284741-4b813f00-9947-11e9-8cbd-f0bd2fe1a01b.jpg" width = "90%" height = "90%"></img>
+    
+    ```
+    이미지 행 기준 절반 하단부에서 차선위치를 찾습니다.
+    
+    이미지 행의 1/2 지점을 구합니다. int 형변형으로 홀수/2 일 경우 소수점을 무시합니다.
+    
+    먼저 차선 인식을 위한 Base를 찾기위해 이미지 절반 하단부에서 열 단위로 한 줄 씩 더해줍니다.
+    
+    해당 과정은 위 이미지의 Histogram(노란색)과 같습니다.
+    
+    LeftMaxIndex = np.argmax(histogram[:midCol])
+    RightMaxIndex = np.argmax(histogram[midCol:]) + midCol
+    
+    histogram의 절반 좌측부분에서 제일 큰 값의 인덱스를 찾고,
+    
+    histogramd의 절반 우측부분에서 제일 큰 값의 인덱스를 찾습니다.
+    
+    (RightMaxIndex : midCol~끝이므로 midCol부분이 인덱스 0이 됨. 따라서 midCol을 더해줘야 실제 index값이 나옴)
+    
+    해당 값이 LaneBase가 되며 이 값을 반환해줍니다.
+    
+    ```
+    
     * def SearchLane(xCenter, PixelColor=None):
     * def probeNearby(prevFit, PixelColor):
+    
+    ```c
+    if prevFits == None:
+        leftBaseX, rightBaseX = FindLaneBases()
+        LeftLaneInfo = SearchLane(leftBaseX, PixelColor =[255,0,0])
+        RightLaneInfo = SearchLane(rightBaseX, PixelColor=[0,255,0])
+    else:
+        LeftLaneCoords = probeNearby(prevFits[0], PixelColor = [255,0,0])
+        RightLaneCoords = probeNearby(prevFits[1], PixelColor = [0,255,0])
+
+        LeftLaneInfo = ([], LeftLaneCoords)
+        RightLaneInfo = ([], RightLaneCoords)
+
+    return LeftLaneInfo, RightLaneInfo
+    ```
+    
   * def PolyFit(xPoints, yPoints):
   
    <img src = "https://user-images.githubusercontent.com/47768726/60258880-00e4d000-9911-11e9-9aa9-90ac51b553a1.jpg" width="80%" height="80%"></img>
    
  ```  
-  np.polyfit
+  np.polyfit를 이용하여 함수의 계수를 찾아냅니다.
+  
+  x값과 y값과 함수의 차원을 매개변수로 줍니다.
+  
+  그림과 같이 고차원의 계수부터 저차원의 계수까지 차례대로 찾을수 있게해주는 함수입니다.  
+  
   ```
   * def Qudratic(coeffs, pts):
+  ```
+      return (coeffs[0]*pts**2 + coeffs[1] * pts + coeffs[2]).astype(np.int32)
+      
+      Qudratic은 계수와 pts를 받아와서 2차원 함수를 만들어 줍니다.
+  ```
+  
   * def DrawPolygon(frame, points, color=[255,0,0], thickness = 5, isClosed = True):
+  
+  ```c
+    n = len(points)
+
+    try:
+        for i in range(n-1):
+        cv2.line(frame, points[i], points[i+1], color, thickness)
+
+        if isClosed == True:
+        cv2.line(frame, points[n-1], points[0], color, thickness)
+
+    except :
+        print("도형을 그리는데 에러가 발생했습니다 {} {}".format(points[i], points[i+1]))
+        raise
+  
+  n은 points의 길이를 저장합니다.
+  try에서 오류체크를 해주며 except에서 에러처리를 해줍니다.
+  
+  n-1까지 반복하며 다각형을 그립니다.
+  이전 포인트에서 다음포인트로 색상(color) 두께(thickness)를 통해 선을 그립니다.
+  
+  만약 닫힌 다각형(isClosed == True)을 그리고 싶다면 끝점(n-1)과 시작점(0)을 서로 이어주면 됩니다.
+   
+  ```  
+  
   * def ReductionFrame(frame):
+  
+  ```
+      return cv2.resize(frame, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+      
+      프레임의 사이즈를 1/2크기로 줄여주는 함수입니다.
+  
+  ```
   
 ### Main Code
   ```c
