@@ -239,7 +239,7 @@ RGB이미지를 Gray Scale로 변환합니다.
     
     * def SearchLane(xCenter, PixelColor=None):
     
-    <img src="https://user-images.githubusercontent.com/47768726/60289472-74a6cd00-9951-11e9-94dd-31d2aaf1579e.jpg" width = "90%" height = "90%" ></img>
+    <img src="https://user-images.githubusercontent.com/47768726/60335023-d01b9e00-99d7-11e9-8097-ca5f42351c4f.jpg" width = "90%" height = "90%" ></img>
     
     ```
     본격적으로 SlidingWindows를 사용해 차선을 찾습니다.
@@ -250,26 +250,54 @@ RGB이미지를 Gray Scale로 변환합니다.
     
     윈도우 xLow값은 xCenter의 -100, xHigh값은 xCenter의 +100으로 조정합니다.
     
+    윈도우의 높이는 이미지의 높이 / 윈도우의 개수(10개)입니다. 따라서 이미지 크기의 1/10이 됩니다.
     
+    yLow의 값은 이미지의 마지막 행에서 [(i+1)*윈도우의 높이]가 됩니다. (i는 0부터 시작하며 이미지의 y좌표는 내려갈수록 커집니다)
     
-    ```
+    yHigh의 값은 yLow에 윈도우의 높이를 더해줍니다.
     
+    해당 정보들(xLow, xHigh, yLow, yHigh)를 searchWindowCorners 리스트에 저장해줍니다.
     
-    * def probeNearby(prevFit, PixelColor):
+    searchWindowCorners.append([(window_xLow, window_yLow),(window_xHigh, window_yHigh)])
+    
+    이제 특정 크기를 가진 Sliding Windows를 구현하였습니다.
+    
+    이 Windows를 가지고 차선을 인식해보도록 합니다.
+    
+    먼저 미리 저장해둔 nonzero값(이미지에서 흰색 픽셀[차선]의 좌표)중에 윈도우 안에 있다면 True, 없다면 False로 리스트를 생성합니다.
+     on = ((nonzeroX >= window_xLow) & (nonzeroX <= window_xHigh)) &\
+          ((nonzeroY >= window_yLow) & (nonzeroY <= window_yHigh))
+
+    
+    nonzero에서 True인 부분만 뽑아내어 차선의 좌표를 생성합니다. (윈도우에 들어와있는 흰색의 좌표 (onX, onY))
+    onX = nonzeroX[on]
+    onY = nonzeroY[on]
+
+    lane_xCoordintes.append(onX)
+    lane_yCoordintes.append(onY)
+    
+    lane_xCoordintes, lane_yCoordintes 리스트에 해당 좌표를 추가합니다
+    
+    if np.sum(on) >= RecenterThreshold:
+    xCenter = np.int(np.mean(onX))
+    
+    만약 윈도우내에 픽셀수가 지정해둔 50을 넘어가면, xCenter를 흰색 픽셀들의 평균값으로 재조정해줍니다.    
+    
+    마지막으로  searchWindowCorners(윈도우 모서리 값), lane_xCoordintes(차선 x좌표), lane_yCoordintes(차선 y좌표)를 반환합니다.
+    
+    ```    
     
     ```c
-    if prevFits == None:
-        leftBaseX, rightBaseX = FindLaneBases()
-        LeftLaneInfo = SearchLane(leftBaseX, PixelColor =[255,0,0])
-        RightLaneInfo = SearchLane(rightBaseX, PixelColor=[0,255,0])
-    else:
-        LeftLaneCoords = probeNearby(prevFits[0], PixelColor = [255,0,0])
-        RightLaneCoords = probeNearby(prevFits[1], PixelColor = [0,255,0])
-
-        LeftLaneInfo = ([], LeftLaneCoords)
-        RightLaneInfo = ([], RightLaneCoords)
+    leftBaseX, rightBaseX = FindLaneBases()
+    LeftLaneInfo = SearchLane(leftBaseX, PixelColor =[255,0,0])
+    RightLaneInfo = SearchLane(rightBaseX, PixelColor=[0,255,0])
 
     return LeftLaneInfo, RightLaneInfo
+    
+    FindLaneBases를 통해 찾은 지점이 각자 차선에서 leftBaseX (왼쪽차선의 Xcenter), rightBaseX (오른쪽차선의 Xcenter)가 됩니다.
+    
+    SearchLane함수를 통해 왼쪽차선의 정보와 오른쪽 차선의 정보를 찾은 후 반환하게 됩니다.
+    
     ```
     
   * def PolyFit(xPoints, yPoints):
