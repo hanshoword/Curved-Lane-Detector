@@ -357,15 +357,20 @@ RGB이미지를 Gray Scale로 변환합니다.
 ### Main Code
   ```c
 print(cv2.__version__)
+
+#Video를 받아옵니다.
 cap = cv2.VideoCapture('C:\\Users\\User\\PycharmProjects\\LaneDetection\\project_video.mp4')
 
 while True:
+    # 프레임을 읽습니다.
     ret, frame = cap.read()
     if ret == True:
         temp = frame
+        
         # Gaussian Blur
         frame = GaussianBlur(frame)
         cv2.imshow('LaneDetect', frame)
+        
         # Bird Eyed View
         perspective = BirdEyeView(frame)[0]
         original = BirdEyeView(frame)[1]
@@ -384,40 +389,57 @@ while True:
         # Find Lane
         leftLaneInfo, rightLaneInfo = FindLane(frame)
 
+        # Window의 Corners값을 받아옴
         leftLaneWindows = leftLaneInfo[0]
         rightLaneWindows = rightLaneInfo[0]
 
+        # 찾은 차선의 정보를 좌표로 받습니다.
         leftLaneX, leftLaneY = leftLaneInfo[1]
         rightLaneX, rightLaneY = rightLaneInfo[1]
 
+        # 차선의 좌표를 토대로 이차원 함수의 계수를 찾습니다.
         leftPoly = PolyFit(leftLaneX, leftLaneY)
         rightPoly = PolyFit(rightLaneX, rightLaneY)
 
+        # ys : 이미지의 행을 배열로 받아옵니다.
+        # ys와 계수를 이용해 2차원 함수(xs_left, xs_right)를 생성합니다. 
+        
         ys = np.array(range(frame.shape[0]), dtype=np.int32)
         xs_left = Qudratic(leftPoly, ys)
         xs_right = Qudratic(rightPoly, ys)
 
+        # frame과 동일한 이미지를 생성합니다.
         searchAreaFrame = np.dstack((frame, frame, frame)) * 255
 
-
+        # 아까 받아온 WindowCorner정보를 토대로 SlidingWindows를 그려줍니다.
         for window in leftLaneWindows:
            cv2.rectangle(searchAreaFrame, window[0], window[1], color = [255, 0, 0], thickness = 5)
 
         for window in rightLaneWindows:
             cv2.rectangle(searchAreaFrame, window[0], window[1], color = [255, 0, 0], thickness = 5)
 
+
+        # zip : 김밥 슬라이스
+        # 1,2,3,4,5
+        # a,b,c,d,e
+        # (1,a), (2,b), (3,c), (4,d), (5,e)
+        # 왼쪽차선, 오른쪽차선을 좌표형태로 생성합니다.
+        
         left_points = [(x,y) for (x,y) in zip(xs_left, ys)]
         right_points = [(x,y) for (x,y) in zip(xs_right, ys)]
         all_points = [pt for pt in left_points]
         all_points.extend([pt for pt in reversed(right_points)])
 
+        # 생성한 좌표를 토대로 차선을 그려줍니다.
         DrawPolygon(searchAreaFrame, left_points, color=[0, 0, 255], isClosed=False, thickness=15)
         DrawPolygon(searchAreaFrame, right_points, color=[0, 0, 255], isClosed=False, thickness=15)
 
+        #BirdEyedView위에 인식한 차선의 결과를 겹쳐서 보여줍니다.
         birdeyedview = cv2.addWeighted(bird, 1.0, searchAreaFrame, 1.0, 0.0)
         birdeyedview = ReductionFrame(birdeyedview)
         cv2.imshow('BirdEyedView', birdeyedview)
 
+        # 마지막으로 BirdEyedView를 벗어나 실제 이미지에서 인식된 차선을 보여줍니다.
         unwarp = warpFrame(searchAreaFrame, original)
 
         #cv2.imshow('Unwarp', unwarp)
@@ -435,3 +457,35 @@ cv2.destroyAllWindows()
 ```
   
   
+## 분석 및 평가
+
+```
+Canny & Hough 차선인식에서 제한됐던 곡선이 인식되었습니다.
+
+BirdEyedView를 통하여 차선이 일렬로 정렬되면서, matrix를 열단위로 분석하는 알고리즘을 사용해볼수 있었습니다.
+
+BirdEyedView를 생성 할 때 차선을 잘 정렬되도록 적절한 좌표를 설정하여야 정확도가 올라갔습니다.
+
+Video를 받아와서 인식한 결과이며 새로운 Video에 적용 할 시, BirdEyedView 목적지 좌표를 새로 설정해줘야 제대로 동작할것입니다.
+
+필터 Threshold 조절 또한 필요할것입니다.
+
+Sliding Windows의 너비도 중요했는데, 너비를 너무 넓게잡으면 옆에 noise까지 인식하게될 확률이 있었습니다.
+
+그리고 Windows의 개수가 많아지면 속도가 저하되며 오차가 더 나는 경우도 있었습니다.
+
+```
+
+## 개선 방안 
+```
+
+ 맑은 날씨의 Video로 테스트하였으며, 그림자 및 햇빛이 드리운다면 정확도가 떨어집니다.
+ 
+ 필터링이 정확할수록 높은 성능을 보여줬습니다. 필터링의 중요성을 알 수 있었고 좀 더 정교한 필터를 필요로 할것입니다.
+ 
+ 자료롤 찾아보니 Sobel 필터링에서 magnitude & angle & hls공간에서 채널을 나눈후 필터링하는 것을 사용해 볼 수 있습니다. 
+ 
+ BirdEyedView의 좌표를 조절하여 좀 더 정확도를 높일수 있을것입니다. 
+ 
+ 
+```
